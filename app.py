@@ -11,7 +11,7 @@ def index():
     return redirect(url_for('submit'))
 
 def findRating(year):
-    rating = (Model.model.coef_x * year) + Model.model.intercept_
+    rating = (Model.model.coef_ * year) + Model.model.intercept_
     return rating
 
 class SubmitForm(Form):
