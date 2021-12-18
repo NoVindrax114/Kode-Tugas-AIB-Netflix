@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Welcome to our app</h1>
+    {% if message %}
+        <p class="message">{{ message | safe }}</p>
+    {% endif %}
+    {% from "includes/_formhelpers.html" import render_field %}
+    <form method="POST" action="">
+        <div class="form-group">
+            {{render_field(form.year, class_="form-control")}}
+        </div>
+        <p><input type="submit" class="btn btn-primary" value="Submit"></p>
+   </form>
+    <!-- <form action="/submit" method="POST">
+        <div class="form-group">
+        <h3>Year</h3>
+        <input
+            type="number"
+            name="year"
+            placeholder="Input your desire year"
+        />
+        </div>
+        <input type="submit" value="Submit" class="btn" />
+    </form> -->
+{% endblock %}

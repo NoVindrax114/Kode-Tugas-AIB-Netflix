@@ -1,1 +1,8 @@
-HALO
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Result</h1>
+    <p>Year of Film = {{year}}</p>
+    <p>Prediction Rating = {{res}}</p>
+    <a href="/submit" class="btn btn-primary btn-lg">Back</a>
+{% endblock %}

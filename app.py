@@ -1,33 +1,38 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import model as Model
+from wtforms import Form, IntegerField
 
 app = Flask(__name__)
-
-ENV = 'dev'
-
-if ENV == 'dev':
-    app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/netflix'
-else:
-    app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = ''
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect(url_for('submit'))
 
-@app.route('/submit', methods=['POST'])
+def findRating(year):
+    rating = (Model.model.coef_x * year) + Model.model.intercept_
+    return rating
+
+class SubmitForm(Form):
+    year = IntegerField('Year')
+
+@app.route('/submit', methods=['GET','POST'])
 def submit():
+    form = SubmitForm(request.form)
     if request.method == 'POST':
-        year = request.form['year']
-        if year == '':
-            return render_template('index.html', message='Please enter required field')
-        return render_template('result.html')
+        SubmitForm.year = form.year.data
+        if form.year.data == '':
+            return render_template('submit.html', message='Please enter required field')
+        return redirect(url_for('result'))
+    return render_template('submit.html',form=form)
+
+@app.route('/result')
+def result():
+    year = SubmitForm.year
+    res = findRating(year)
+    return render_template('result.html', res=res, year=year)
 
 if __name__ == '__main__':
+    app.debug=True
     app.run()

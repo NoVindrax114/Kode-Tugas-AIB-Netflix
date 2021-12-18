@@ -1,31 +1,30 @@
 import pandas as pd
-import numpy as np
-from sklearn.linear_model import LinearRegression 
-from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, r2_score
 
-df1 = pd.read_csv("OC_DF.csv")
-df2 = pd.read_csv("OC_user_rating_DF.csv")
-df = pd.merge(df1, df2, on="title")
+df = pd.read_csv("OC_DF.csv")
 df.dropna(subset = ["rating"], inplace=True)
 df.dropna(subset = ["year"], inplace=True)
 
-df_train = df.iloc[:518,:]
-df_test = df.iloc[519:,:]
+Y = df.rating
+X = df.drop(['title','genre','actor','imdb_id','kind','matched_by','rating','votes'], axis=1)
 
-x_train = df_train['year']
-y_train = df_train['rating']
-x_test = df_test['year']
-y_test = df_test['rating']
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
-x_train = np.array(x_train)
-y_train = np.array(y_train)
-x_test = np.array(x_test)
-y_test = np.array(y_test)
+X_train.shape, Y_train.shape
+#(532,1) (532,1)
+X_test.shape, Y_test.shape
+#(134,1) (134,1)
 
-x_train = x_train.reshape(-1,1)
-x_test = x_test.reshape(-1,1)
+model = linear_model.LinearRegression()
+model.fit(X_train, Y_train)
+Y_pred = model.predict(X_test)
 
-clf = LinearRegression(normalize=True)
-clf.fit(x_train,y_train)
-y_pred = clf.predict(x_test)
-print(r2_score(y_test,y_pred))
+# print('Coefficients:', model.coef_)
+# print('Intercept:', model.intercept_)
+# print('Mean squared error (MSE): %.2f'
+#       % mean_squared_error(Y_test, Y_pred))
+# print('Coefficient of determination (R^2): %.2f'
+#       % r2_score(Y_test, Y_pred))
+#Y=-0.11188241(year) + 232.81646130373971
