@@ -7,4 +7,4 @@ Solusi yang kami tawarkan adalah sistem untuk memprediksi nilai rating yang akan
 Untuk mengakses sistem kami, dapat diakses melalui link berikut
 https://kelompok3-aib.herokuapp.com/
 ## Data yang diambil
-Data yang diambil adalah data produksi film dari Netflix. Atribut-atribut yang diambil berupa rating film dan tahun pembuatan film.
+Data yang diambil adalah data produksi film dari Netflix. Atribut-atribut yang diambil berupa rating film, tahun produksi film, dan jumlah orang yang melakukan voting.
